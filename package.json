@@ -1,0 +1,11 @@
+{
+  "name": "kickbase-berater-mcp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Schreibgeschützter MCP-Server für Kickbase (inoffizielle API v4)",
+  "scripts": {
+    "test": "node test/test.mjs"
+  },
+  "engines": { "node": ">=18" }
+}
