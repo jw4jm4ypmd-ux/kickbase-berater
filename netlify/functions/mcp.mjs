@@ -12,7 +12,13 @@ function authorized(req) {
   const url = new URL(req.url);
   const bearer = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
   // Schlüssel entweder im Pfad (/mcp/SCHLÜSSEL), als ?key= oder als Bearer-Token
-  const pathKey = decodeURIComponent(url.pathname.replace(/^\/mcp\/?/, "").split("/")[0] || "");
+  const rawKey = url.pathname.replace(/^\/mcp\/?/, "").split("/")[0] || "";
+  let pathKey = rawKey;
+  try {
+    pathKey = decodeURIComponent(rawKey);
+  } catch {
+    // ungültige %-Folge: Rohwert verwenden statt abzustürzen
+  }
   const given = pathKey || url.searchParams.get("key") || bearer || "";
   const a = Buffer.from(given);
   const b = Buffer.from(secret);
