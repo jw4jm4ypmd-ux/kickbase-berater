@@ -1,7 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 import { handleRpc } from "../../lib/mcp.mjs";
 
-export const config = { path: "/mcp" };
+export const config = { path: ["/mcp", "/mcp/*"] };
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
@@ -11,7 +11,9 @@ function authorized(req) {
   if (!secret) return false; // ohne Geheimschlüssel bleibt der Server zu
   const url = new URL(req.url);
   const bearer = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
-  const given = url.searchParams.get("key") || bearer || "";
+  // Schlüssel entweder im Pfad (/mcp/SCHLÜSSEL), als ?key= oder als Bearer-Token
+  const pathKey = decodeURIComponent(url.pathname.replace(/^\/mcp\/?/, "").split("/")[0] || "");
+  const given = pathKey || url.searchParams.get("key") || bearer || "";
   const a = Buffer.from(given);
   const b = Buffer.from(secret);
   return a.length === b.length && timingSafeEqual(a, b);

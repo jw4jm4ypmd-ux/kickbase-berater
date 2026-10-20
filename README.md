@@ -16,7 +16,7 @@ Kleiner Server, der Kader, Budget, Transfermarkt, Marktwertverlauf und Spielplan
    - optional `KICKBASE_LEAGUE_ID`: Standardliga, falls du mehrere hast
 3. Neu deployen, damit die Variablen gelten.
 4. In Claude unter *Einstellungen → Connectors → Eigenen Connector hinzufügen* diese URL eintragen:
-   `https://DEIN-PROJEKT.netlify.app/mcp?key=DEIN_MCP_SECRET`
+   `https://DEIN-PROJEKT.netlify.app/mcp/DEIN_MCP_SECRET`
 
 Wer die URL kennt, kann deine Kickbase-Daten lesen. Gib sie nicht weiter. Bei Verdacht `MCP_SECRET` ändern und die URL im Connector aktualisieren.
 

@@ -45,6 +45,24 @@ const rpc = async (body, key = "s3cret") => {
   return { status: res.status, json: res.status === 202 ? null : await res.json() };
 };
 
+// Schlüssel im Pfad funktioniert ebenfalls
+const viaPath = await handler(
+  new Request("http://localhost/mcp/s3cret", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "ping" }),
+  })
+);
+assert.equal(viaPath.status, 200);
+const wrongPath = await handler(
+  new Request("http://localhost/mcp/falsch", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "ping" }),
+  })
+);
+assert.equal(wrongPath.status, 401);
+
 // Zugriffsschutz
 assert.equal((await rpc({ jsonrpc: "2.0", id: 1, method: "ping" }, "falsch")).status, 401);
 process.env.MCP_SECRET = "";
